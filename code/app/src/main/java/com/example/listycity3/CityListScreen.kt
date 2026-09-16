@@ -13,18 +13,77 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listycity3.ui.theme.ListyCity3Theme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.foundation.layout.height
+
 
 @Composable
 fun CityListScreen(
     cities: List<City>,
+    onAddCity: (City) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier) {
-        itemsIndexed(cities) { index, city ->
-            CityRow(city = city)
+    var newCityName by remember { mutableStateOf("") }
+    var newProvinceName by remember { mutableStateOf("") }
+    Column(modifier = modifier){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            OutlinedTextField(
+                value = newCityName,
+                onValueChange = { newCityName = it.toProperCase() },
+                label = { Text("City") },
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            OutlinedTextField(
+                value = newProvinceName,
+                onValueChange = { newProvinceName = it.uppercase() },
+                label = { Text("Province") },
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                modifier = Modifier
+                    .padding(vertical = 12.dp),
+                shape = RoundedCornerShape(4.dp),
+                onClick = {
+                    if (newCityName.isNotBlank() && newProvinceName.isNotBlank()) {
+                        onAddCity(
+                            City(
+                                name = newCityName,
+                                province = newProvinceName
+                            )
+                        )
+                        newCityName = ""
+                        newProvinceName = ""
+                    }
+                }
+            ) {
+                Text("Add City")
+            }
+        }
+        LazyColumn(modifier = modifier) {
+            itemsIndexed(cities) { index, city ->
+                CityRow(city = city)
 
-            if (index < cities.lastIndex) {
-                HorizontalDivider()
+                if (index < cities.lastIndex) {
+                    HorizontalDivider()
+                }
             }
         }
     }
@@ -60,7 +119,8 @@ fun CityListScreenPreview() {
                 City("Edmonton", "AB"),
                 City("Vancouver", "BC"),
                 City("Calgary", "AB")
-            )
+            ),
+            onAddCity = {}
         )
     }
 }
