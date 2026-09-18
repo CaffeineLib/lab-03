@@ -20,6 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listycity3.ui.theme.ListyCity3Theme
 
+/* Do you like code to see comments?
+   Would you like to see more?
+   Consider hiring me to your team.
+   C, Kotlin/Java, Python, SQL, VBA
+   Auth: Ben Mazor, 8259754321
+*/
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
